@@ -101,3 +101,28 @@ B -/ /-----/
 | false    | __true__ | __true__ |
 | __true__ | false    | __true__ |
 | __true__ | __true__ | false    |
+
+### PART 1C: NUMBER SYSTEMS
+
+- Humans are most familiar with decimal (base 10)
+- Computers are logically binary (base 2)
+
+| Base (in decimal) | Name                                |
+|-------------------|-------------------------------------|
+| 2                 | Binary                              |
+| 3[^1]             | Ternary, trinary                    |
+| 4[^1]             | Quaternary                          |
+| 5[^1]             | Quinary                             |
+| 6[^1]             | Senary, seximal                     |
+| 7[^1]             | Septimal, septenary                 |
+| 8                 | Octal                               |
+| 9[^1]             | Nonary, nonal                       |
+| 10                | Decimal                             |
+| 11[^1]            | Undecimal, unodecimal, undenary     |
+| 12[^1]            | Duodecimal, dozenal                 |
+| 13[^1]            | Tredecimal, tridecimal              |
+| 14[^1]            | Quattuordecimal, quadrodecimal      |
+| 15[^1]            | Quindecimal, pentadecimal           |
+| 16                | Hexadecimal, sexadecimal, sedecimal |
+
+[^1]: Serve no purpose in these notes, I just added because I felt like it
