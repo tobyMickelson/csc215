@@ -154,3 +154,51 @@ B -/ /-----/
 | 18      |  10010 |        `0001 0010` |
 | 19      |  10011 |        `0001 0011` |
 | 20      |  10100 |        `0001 0100` |
+
+## APPENDIX
+
+### CIRCUIT BASED LOGIC GATES
+
+Sample gate (open, closed):
+```
+POWER ---./ .--- OUTPUT
+          |
+SWITCH ---+
+```
+```
+POWER ---.__.--- OUTPUT
+          |
+SWITCH ---+
+```
+
+`AND`:
+```
+POWER ---./ .---./ .--- OUTPUT
+          |      |
+A --------+      |
+                 |
+B ---------------+
+```
+
+`OR`:
+```
+POWER ---./ .---+--- OUTPUT
+          |     |
+A --------+     |
+                |
+POWER ---./ .---+
+          |
+A --------+
+```
+
+`NOT`:
+This one is kind of black magic, the resistor makes the output high unless a different path is opened for it, making the output low (please note that if built, this may short curcuit--this is for demonstration purposes only)
+```
+                    +--------------+
+                    |              |
+POWER ---RESISTOR---+---./ .---+   +--- OUTPUT
+                         |     |
+GROUND ------------------(-----+
+                         |
+A -------RESISTOR--------+
+```
