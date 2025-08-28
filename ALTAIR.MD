@@ -129,8 +129,7 @@ B -/ /-----/
 
 ### PART 1D: THE BINARY SYSTEM
 
-- Converting a bit string (binary) , suppose `s`, to decimal can be done by:
-$$ \sum^{len(s)-1}_{n=0}s[n]*2^n $$
+- Converting a bit string (binary) , suppose $s$, to decimal can be done by: $\sum^{len(s)-1}_{n=0}s[n]\cdot2^n$
 
 | Decimal | Binary | Binary (formatted) |
 |---------|-------:|-------------------:|
