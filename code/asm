@@ -1,0 +1,273 @@
+#!/usr/bin/env python3
+
+
+import re
+# import subprocess
+import sys
+
+
+labels: dict[str, int] = {}
+
+def parse_line(line: str) -> (str or None, list[str]):
+    label: str = ""
+    code: list[str] = []
+    comment = None
+    args = []
+
+    if len(line.split(';', 1)) == 2: # code ; comment
+        noncomment = line.split(';', 1)[0].strip()
+        comment = line.split(';', 1)[1].strip()
+    else: noncomment = line.strip()
+
+    if len(noncomment.split(':', 1)) == 2: # label: code
+        label = noncomment.split(':', 1)[0].strip()
+        unsplit_code = noncomment.split(':', 1)[1].strip()
+    else: unsplit_code = noncomment.strip()
+
+    if len(unsplit_code.split(' ', 1)) == 2: # operator arg,arg
+        code += [unsplit_code.split(' ', 1)[0].strip()]
+        unsplit_args = unsplit_code.split(' ', 1)[1].strip()
+    else: unsplit_args = ""
+
+    if unsplit_args: args = [arg.strip() for arg in unsplit_args.split(',')] # arg
+
+    return (label, code + args)
+
+def to_byte(number: int) -> bytes: return number.to_bytes(1, "little", signed=False)
+def to_word(number: int) -> bytes: return number.to_bytes(2, "little", signed=False)
+def is_binary(number: str) -> bool: return re.match(r"^[01]+B$", number)
+def is_octal(number: str) -> bool: return re.match(r"^[0-7]+[OQ]$", number)
+def is_decimal(number: str) -> bool: return re.match(r"^[0-9]+D?$", number)
+def is_hex(number: str) -> bool: return re.match(r"^[0-9A-F]+H$", number)
+def parse_number(number: str) -> int:
+    if number in labels.keys():
+        return labels[number]
+    if is_binary(number):
+        return int(number[:-1], 2)
+    if is_octal(number):
+        return int(number[:-1], 8)
+    if is_hex(number):
+        return int(number[:-1], 16)
+    if is_decimal(number):
+        return int(number, 10) if number[-1] != 'D' else int(number[:-1], 10)
+
+    raise UserWarning(f"unknown label or literal: {number}")
+
+def assemble(lines: list[list[str]]) -> bytes:
+    output: bytes = b""
+    line_num: int = 0
+
+    for line_ in lines:
+        try:
+            line_num += 1
+            line = [item.upper() for item in line_[1]]
+            label = line_[0].upper()
+            cmd: str = line[0]
+
+            if label:
+                if label in labels.keys():
+                    UserWarning(f"label `{label}` already defined")
+                else:
+                    labels[label] = len(output)
+
+            def argrange(min_: int, max_: int):
+                if len(line) > max_: raise UserWarning("too many arguments")
+                if len(line) < min_: raise UserWarning("too few arguments")
+            def reg(register: str) -> int: # register to id
+                return ["B", "C", "D", "E", "H", "L", "M", "A"].index(register)
+            def rppsw(register_pair: str) -> int: # register pair to id (with psw instead of sp)
+                return ["B", "D", "H", "PSW"].index(register_pair)
+            def rpsp(register_pair: str) -> int: # register pair to id (with sp instead of psw)
+                return ["B", "D", "H", "SP"].index(register_pair)
+            def regopa(name: str, opcode: int): # register operation A (when .. rrr ...)
+                nonlocal output
+                if line[0] != name: return
+                argrange(2, 2)
+                output += to_byte(opcode | (regline[1]) << 3)
+            def regopb(name: str, opcode: int): # register operation A (when .. ... rrr)
+                nonlocal output
+                if line[0] != name: return
+                argrange(2, 2)
+                output += to_byte(opcode | reg(line[1]))
+            def rppswop(name: str, opcode: int): # register pair operation (with psw instead of sp)
+                nonlocal output
+                if line[0] != name: return
+                argrange(2, 2)
+                output += to_byte(opcode | (rppsw(line[1])) << 4)
+            def rpspop(name: str, opcode: int): # register pair operation (with sp instead of psw)
+                nonlocal output
+                if line[0] != name: return
+                argrange(2, 2)
+                output += to_byte(opcode | (rpsp(line[1]) << 4))
+            def op1(name: str, opcode: int): # 1 byte operation
+                nonlocal output
+                if line[0] != name: return
+                argrange(1, 1)
+                output += to_byte(opcode)
+            def op2(name: str, opcode: int): # 2 byte operation
+                nonlocal output
+                if line[0] != name: return
+                argrange(2, 2)
+                output += to_byte(opcode) + to_byte(parse_number(line[1]))
+            def op3(name: str, opcode: int): # 3 byte operation
+                nonlocal output
+                if line[0] != name: return
+                argrange(2, 3)
+                if len(line) == 3:
+                    output += to_byte(opcode) + to_byte(parse_number(line[1])) + to_byte(parse_number(line[2]))
+                else: output += to_byte(opcode) + to_word(parse_number(line[1]))
+
+            if cmd == "DB": # define byte
+                for byte in line[1:]:
+                    output += to_byte(parse_number(byte))
+            if cmd == "DW": # define word
+                for word in line[1:]:
+                    output += to_word(parse_number(word))
+
+            op2("IN", 0xDB)
+            op2("OUT", 0xD3)
+            op1("EI", 0xFB)
+            op1("DI", 0xF3)
+            op1("HLT", 0x76)
+            if cmd == "RST":
+                argrange(2, 2)
+                arg: int = int(line[1], 10)
+                if not (0 <= num <= 7): raise UserWarning("must be between 0 and 7")
+                output += to_byte(0xC7 | (arg << 3))
+            op1("CMC", 0x3F)
+            op1("STC", 0x37)
+            op1("NOP", 0x00)
+
+            regopa("INR", 0x04)
+            regopa("DCR", 0x05)
+            op1("CMA", 0x2F)
+            op1("DAA", 0x27)
+
+            rppswop("PUSH", 0xC5)
+            rppswop("POP", 0xC1)
+            rpspop("DAD", 0x09)
+            rpspop("INX", 0x03)
+            rpspop("DCX", 0x0B)
+            op1("XCHG", 0xEB)
+            op1("XTHL", 0xE3)
+            op1("SPHL", 0xF9)
+
+            op1("RLC", 0x07)
+            op1("RRC", 0x0F)
+            op1("RAL", 0x17)
+            op1("RAR", 0x1F)
+
+            if cmd == "MOV":
+                argrange(3, 3)
+                output += to_byte(0x40 | (reg(line[1]) << 3) | reg(line[2]))
+            if cmd == "STAX":
+                argrange(2, 2)
+                output += to_byte(0x02 | (["B", "D"].index(line[1]) << 4))
+            if cmd == "LDAX":
+                argrange(2, 2)
+                output += to_byte(0x0A | (["B", "D"].index(line[1]) << 4))
+            regopb("ADD", 0x80)
+            regopb("ADC", 0x88)
+            regopb("SUB", 0x90)
+            regopb("SBB", 0x98)
+            regopb("ANA", 0xA0)
+            regopb("XRA", 0xA8)
+            regopb("ORA", 0xB0)
+            regopb("CMP", 0xB8)
+            op3("STA", 0x32)
+            op3("LDA", 0x3A)
+            op3("SHLD", 0x22)
+            op3("LHLD", 0x2A)
+            if cmd == "LXI":
+                argrange(3, 4)
+                output += to_byte(0x01 | (rpsp(line[1]) << 4))
+                if len(line) == 4:
+                    output += to_byte(parse_number(line[2])) + to_byte(parse_number(line[3]))
+                else:
+                    output += to_word(parse_number(line[2]))
+            if cmd == "MVI":
+                argrange(3, 3)
+                output += to_byte(0x06 | (reg(line[1]) << 3))
+                output += to_byte(parse_number(line[2]))
+            op2("ADI", 0xC6)
+            op2("ACI", 0xCE)
+            op2("SUI", 0xD6)
+            op2("SBI", 0xDE)
+            op2("ANI", 0xE6)
+            op2("XRI", 0xEE)
+            op2("ORI", 0xF6)
+            op2("CPI", 0xFE)
+
+            op1("PCHL", 0xE9)
+            op3("JMP", 0xC3)
+            op3("JC", 0xDA)
+            op3("JNC", 0xD2)
+            op3("JZ", 0xCA)
+            op3("JNZ", 0xC2)
+            op3("JM", 0xFA)
+            op3("JP", 0xF2)
+            op3("JPE", 0xEA)
+            op3("JPO", 0xE2)
+            op3("CALL", 0xCD)
+            op3("CC", 0xDC)
+            op3("CNC", 0xD4)
+            op3("CZ", 0xCC)
+            op3("CNZ", 0xC4)
+            op3("CM", 0xFC)
+            op3("CP", 0xF4)
+            op3("CPE", 0xEC)
+            op3("CPO", 0xE4)
+            op1("RET", 0xC9)
+            op1("RC", 0xD8)
+            op1("RNC", 0xD0)
+            op1("RZ", 0xC8)
+            op1("RNZ", 0xC0)
+            op1("RM", 0xF8)
+            op1("RP", 0xF0)
+            op1("RPE", 0xE8)
+            op1("RPO", 0xE0)
+
+        except UserWarning as e:
+            print(f"{sys.argv[0]}: {e} (line: {line_num})")
+            sys.exit(1)
+
+    return output
+
+def pad(data: bytes, length: int) -> bytes:
+    while len(data) < length:
+        data += to_byte(0)
+    return data
+
+def write(file: str, data: bytes):
+    file = open(file, "wb")
+    file.write(data)
+    file.close()
+
+def read(file: str) -> list[str]:
+    try:
+        file = open(file, "r")
+        data: list[str] = file.readlines()
+        file.close()
+        return data
+    except FileNotFoundError:
+        print(f"{sys.argv[0]}: input file does not exist")
+        sys.exit(1)
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print(f"usage: {sys.argv[0]} input.s output.bin")
+        sys.exit(0 if len(sys.argv) == 1 else 1)
+
+    write(
+        sys.argv[2],
+        pad(
+            assemble(
+                [parse_line(line) for line in read(sys.argv[1])]
+            ),
+            8192
+        )
+    )
+
+    # subprocess.call(["/usr/bin/env", "shasum", "--binary", "--algorithm", "1", sys.argv[2]])
+    # subprocess.call(["/usr/bin/env", "xxd", sys.argv[2]])

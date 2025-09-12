@@ -1,11 +1,15 @@
-// a - b = res
+; a - b = res
 
-#define NUM_A $0080
-#define NUM_B $0081
-#define RES   $0082
+JMP 7 ; START
+NUM_A: DB 40
+NUM_B: DB 11
+RESULT: DB 00h
+ANSWER: DB 29
 
-LDA NUM_B
-MOV B,A
-LDA NUM_A
-SUB B
-STA RES
+START:
+    LDA NUM_B
+    MOV B,A
+    LDA NUM_A
+    SUB B
+    STA RESULT
+    HLT
