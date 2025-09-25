@@ -26,3 +26,20 @@
   - CP/M disk
   - Blank disk for exercises
   - 8080/8085 Assembly Language Programming Manual
+
+### HARDWARE COMPONENTS OF THE COMPUTER SYSTEM
+
+#### DISK ADDRESSING
+
+- Each disk has 76 tracks
+- Each track has 26 sectors
+- Each sector has 128 bytes
+- The index hole denotes the start of the sectors
+- Each sector has a 7 byte identification field
+
+#### HARD COPY
+
+- Hard copies of work were always provided with teletypes
+- Teletypes and its relatives are all character printers
+- Line printers and print faster but can print lines at a time
+- Some CRTs have printer ports built into them
