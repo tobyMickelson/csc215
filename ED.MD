@@ -42,7 +42,9 @@ Save and ***E***xit:
 ***Q***uit without save:
 `Q` then `Y`
 
+
 <-- table: to be completed eventually
+
 | Character | Context | Usage |
 |-----------|---------|-------|
 | `A`       | `nA`    | Append the next `n` lines of the source file to the memory buffer |
@@ -74,4 +76,5 @@ Save and ***E***xit:
 | `` | `` |  |
 | `` | `` |  |
 | `` | `` |  |
+
 -->
