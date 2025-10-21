@@ -1,5 +1,7 @@
 # ED
 
+For all occurrences of `n` (except for the lowercase version of the `N` command), it repersents any number from -65535 to 65535. Positive means forwards and negative means backwards.
+
 If file is a text file, convert `\n` to `\r\n` (on MacBooks):
 `perl -pe 's/\n/\r\n/g' lf.ext > crlf.ext`
 
@@ -18,13 +20,11 @@ Enabling file numbers (***V***erify):
 ***T***ype (print) entire buffer:
 `#T`
 
-Move up or down ***L***ines:
+Move down ***L***ines:
 `nL` or `n`
-where `n` is the number of line moves down if positive and up if negative
 
-Move forward and backward **C**haracters:
+Move forward ***C***haracters:
 `nC`
-where `n` is the number of character moves forward if positive and backward if negative
 
 ***i***nsert text case-sensitive:
 `i<text to insert>^z`
@@ -32,9 +32,8 @@ where `n` is the number of character moves forward if positive and backward if n
 ***I***nsert text uppercase:
 `I<text to insert>^z`
 
-***K***ill (delete) lines:
-`nK`
-where `n` is the number of line moves down if positive and up if negative
+***D***elete characters:
+`nD`
 
 Save and ***E***xit:
 `E`
@@ -43,36 +42,35 @@ Save and ***E***xit:
 `Q` then `Y`
 
 
-<!-- table: to be completed eventually
-| Character | Context | Usage |
-|-----------|---------|-------|
-| `A`       | `nA`    | Append the next `n` lines of the source file to the memory buffer |
-| `B` | `+/-B` |  |
-| `C` | `` |  |
-| `D` | `` |  |
-| `E` | `` |  |
-| `F` | `` |  |
-| `G` | `` |  |
-| `H` | `` |  |
-| `I` | `` |  |
-| `J` | `` |  |
-| `K` | `` |  |
-| `L` | `` |  |
-| `M` | `` |  |
-| `N` | `` |  |
-| `O` | `` |  |
-| `P` | `` |  |
-| `Q` | `` |  |
-| `R` | `` |  |
-| `S` | `` |  |
-| `T` | `` |  |
-| `U` | `` |  |
-| `V` | `` |  |
-| `W` | `nW` | Write the first `n` lines of buffer to  |
-| `X` | `` |  |
-| `Y` | `` |  |
-| `Z` | `` |  |
-| `` | `` |  |
-| `` | `` |  |
-| `` | `` |  |
--->
+
+| Character     | Context              | Usage                                                                                   |
+|---------------|----------------------|-----------------------------------------------------------------------------------------|
+| `0`           | `0`                  | For `A` at least, repersents half the buffer                                            |
+| `#`           | `#`                  | Repersents the number `25565`                                                           |
+| `^L`          | `^L`                 | Repersents a `<cr><lf>` for strings                                                     |
+| `^Z`          | `^Z`                 | End of string                                                                           |
+| `^U` and `^X` | `^U` or `^X`         | Clears the current console line                                                         |
+| `A`           | `nA`                 | ***A***ppend the next `n` lines of the source file to the memory buffer                 |
+| `B`           | `[-]B`               | Jump to top of ***B***uffer, bottom of `-` if provided                                  |
+| `C`           | `nC`                 | Move forward `n` ***C***haracters                                                       |
+| `D`           | `nD`                 | ***D***elete the next `n` characters                                                    |
+| `E`           | `E`                  | Save and ***E***xit                                                                     |
+| `F`           | `nF<string>`         | ***F***ind the `n`th occurrence of the string                                           |
+| `H`           | `H`                  | Close and reopen file (***H***ead)                                                      |
+| `I`           | `I<string>`          | ***I***nsert string                                                                     |
+| `J`           | ``                   |  |
+| `K`           | `nK`                 | ***K***ill (delete) next `n` lines                                                      |
+| `L`           | `nL` or `n`          | Move down `n` ***L***ines                                                               |
+| `M`           | `nM<command(s)>`     | Macro (repeat) commands `n` times                                                       |
+| `N`           | `nN`                 | ***N***ext (or `n`th) occurrence of autoscan                                            |
+| `O`           | `O` `<Y|N>`          | Return to ***O***riginal file                                                           |
+| `P`           | `nP`                 | Move and ***P***rint the next `n` ***P***ages                                           |
+| `Q`           | `Q` `<Y|N>`          | ***Q***uit without saving                                                               |
+| `R`           | ``                   |  |
+| `S`           | `nS<string><string>` | ***S***ubstitute the next `n` occurrences of first string with second string            |
+| `T`           | `nT`                 | ***T***ype the next `n` lines                                                           |
+| `U`           | `[-]U`               | Translate (?to ***U***ppercase?) case                                                   |
+| `V`           | `[-|0]V`             | Enable or disable if `-` line number ***V***erify; if `0` shows free/total buffer stats |
+| `W`           | `nW`                 | Write the `n` lines of buffer to file                                                   |
+| `Z`           | `nZ`                 | Sleep (?***Z***leep?) `n` (supposed) seconds                                            |
+<!-- `X` has no definition despite not returning an error -->
