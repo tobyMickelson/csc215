@@ -1,5 +1,7 @@
 # ED
 
+## "Turorial"
+
 For all occurrences of `n` (except for the lowercase version of the `N` command), it repersents any number from -65535 to 65535. Positive means forwards and negative means backwards.
 
 If file is a text file, convert `\n` to `\r\n` (on MacBooks):
@@ -41,12 +43,12 @@ Save and ***E***xit:
 ***Q***uit without save:
 `Q` then `Y`
 
-
+## List of Commands
 
 | Character     | Context              | Usage                                                                                   |
 |---------------|----------------------|-----------------------------------------------------------------------------------------|
 | `0`           | `0`                  | For `A` at least, repersents half the buffer                                            |
-| `#`           | `#`                  | Repersents the number `25565`                                                           |
+| `#`           | `#`                  | Repersents the number `65535`                                                           |
 | `^L`          | `^L`                 | Repersents a `<cr><lf>` for strings                                                     |
 | `^Z`          | `^Z`                 | End of string                                                                           |
 | `^U` and `^X` | `^U` or `^X`         | Clears the current console line                                                         |
@@ -58,19 +60,19 @@ Save and ***E***xit:
 | `F`           | `nF<string>`         | ***F***ind the `n`th occurrence of the string                                           |
 | `H`           | `H`                  | Close and reopen file (***H***ead)                                                      |
 | `I`           | `I<string>`          | ***I***nsert string                                                                     |
-| `J`           | ``                   |  |
+| `J`           | ``                   |                                                                                         |
 | `K`           | `nK`                 | ***K***ill (delete) next `n` lines                                                      |
 | `L`           | `nL` or `n`          | Move down `n` ***L***ines                                                               |
-| `M`           | `nM<command(s)>`     | Macro (repeat) commands `n` times                                                       |
+| `M`           | `nM<command(s)>`     | ***M***acro (repeat) commands `n` times                                                 |
 | `N`           | `nN`                 | ***N***ext (or `n`th) occurrence of autoscan                                            |
-| `O`           | `O` `<Y|N>`          | Return to ***O***riginal file                                                           |
+| `O`           | `O` `<Y\|N>`         | Return to ***O***riginal file                                                           |
 | `P`           | `nP`                 | Move and ***P***rint the next `n` ***P***ages                                           |
-| `Q`           | `Q` `<Y|N>`          | ***Q***uit without saving                                                               |
-| `R`           | ``                   |  |
+| `Q`           | `Q` `<Y\|N>`         | ***Q***uit without saving                                                               |
+| `R`           | ``                   |                                                                                         |
 | `S`           | `nS<string><string>` | ***S***ubstitute the next `n` occurrences of first string with second string            |
 | `T`           | `nT`                 | ***T***ype the next `n` lines                                                           |
-| `U`           | `[-]U`               | Translate (?to ***U***ppercase?) case                                                   |
-| `V`           | `[-|0]V`             | Enable or disable if `-` line number ***V***erify; if `0` shows free/total buffer stats |
-| `W`           | `nW`                 | Write the `n` lines of buffer to file                                                   |
+| `U`           | `[-]U`               |                                                                                         |
+| `V`           | `[-\|0]V`            | Enable or disable if `-` line number ***V***erify; if `0` shows free/total buffer stats |
+| `W`           | `nW`                 | ***W***rite the `n` lines of buffer to file                                             |
 | `Z`           | `nZ`                 | Sleep (?***Z***leep?) `n` (supposed) seconds                                            |
 <!-- `X` has no definition despite not returning an error -->
