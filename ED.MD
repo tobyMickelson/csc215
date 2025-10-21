@@ -9,33 +9,37 @@ Load file to CP/M disk:
 Opening the file:
 `A:ED FILENAME.EXT`
 
-Enabling file numbers:
+Enabling file numbers (**V**erify):
 `V`
 
-Load file to buffer:
+**A**ppend (load) file to buffer:
 `0A`
 
-Print entire buffer:
+**T**ype (print) entire buffer:
 `#T`
 
-Move up or down lines:
+Move up or down **L**ines:
 `nL` or `n`
 where `n` is the number of line moves down if positive and up if negative
 
-Move forward and backward characters:
+Move forward and backward **C**haracters:
 `nC`
 where `n` is the number of character moves forward if positive and backward if negative
 
-Insert text case-sensitive:
+**I**nsert text case-sensitive:
 `i<text to insert>^z`
 
-Insert text uppercase:
+**I**nsert text uppercase:
 `I<text to insert>^z`
 
-Save and quit:
-`E` (exit)
+**K**ill (delete) lines:
+`nK`
+where `n` is the number of line moves down if positive and up if negative
 
-Quit without save:
+Save and **E**xit:
+`E`
+
+**Q**uit without save:
 `Q` then `Y`
 
 <-- table: to be completed eventually
