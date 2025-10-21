@@ -4,43 +4,40 @@
 
 For all occurrences of `n` (except for the lowercase version of the `N` command), it repersents any number from -65535 to 65535. Positive means forwards and negative means backwards.
 
-If file is a text file, convert `\n` to `\r\n` (on MacBooks):
+If file is a text file, convert `\n` to `\r\n` (on MacBooks):<br>
 `perl -pe 's/\n/\r\n/g' lf.ext > crlf.ext`
 
-Load file to CP/M disk:
+Load file to CP/M disk:<br>
 `A:R FILENAME.EXT`
 
-Opening the file:
+Opening the file:<br>
 `A:ED FILENAME.EXT`
 
-Enabling file numbers (***V***erify):
+Enabling file numbers (***V***erify):<br>
 `V`
 
-***A***ppend (load) file to buffer:
+***A***ppend (load) file to buffer:<br>
 `0A`
 
-***T***ype (print) entire buffer:
+***T***ype (print) entire buffer:<br>
 `#T`
 
-Move down ***L***ines:
+Move down ***L***ines:<br>
 `nL` or `n`
 
-Move forward ***C***haracters:
+Move forward ***C***haracters:<br>
 `nC`
 
-***i***nsert text case-sensitive:
+***i***nsert text case-sensitive:<br>
 `i<text to insert>^z`
 
-***I***nsert text uppercase:
-`I<text to insert>^z`
-
-***D***elete characters:
+***D***elete characters:<br>
 `nD`
 
-Save and ***E***xit:
+Save and ***E***xit:<br>
 `E`
 
-***Q***uit without save:
+***Q***uit without save:<br>
 `Q` then `Y`
 
 ## List of Commands
@@ -76,3 +73,6 @@ Save and ***E***xit:
 | `W`           | `nW`                 | ***W***rite the `n` lines of buffer to file                                             |
 | `Z`           | `nZ`                 | Sleep (?***Z***leep?) `n` (supposed) seconds                                            |
 <!-- `X` has no definition despite not returning an error -->
+
+For the commands that handle input (`A`, `F`, `I`, `J`, `M`, `R`, `S`), the uppercase version of the command translates all
+characters to uppercase and the lowercase version keeps the case of the provided input
