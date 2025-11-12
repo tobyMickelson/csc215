@@ -2,7 +2,8 @@
 
 ## "Turorial"
 
-For all occurrences of `n` (except for the lowercase version of the `N` command), it repersents any number from -65535 to 65535. Positive means forwards and negative means backwards.
+For all occurrences of `n` (except for the lowercase version of the `N` command), it repersents any
+number from -65535 to 65535. Positive means forwards and negative means backwards.
 
 If file is a text file, convert `\n` to `\r\n` (on MacBooks):<br>
 `perl -pe 's/\n/\r\n/g' lf.ext > crlf.ext`
@@ -42,10 +43,13 @@ Save and ***E***xit:<br>
 
 ## List of Commands
 
+For all occurrences of `n` (except for the lowercase version of the `N` command), it repersents any
+number from -65535 to 65535. Positive means forwards and negative means backwards.
+
 | Character     | Context              | Usage                                                                                   |
 |---------------|----------------------|-----------------------------------------------------------------------------------------|
 | `0`           | `0`                  | For `A` at least, repersents half the buffer                                            |
-| `#`           | `#`                  | Repersents the number `65535`                                                           |
+| `#`           | `#`                  | Repersents the number `65535`, used to mean "all" or "do all"                           |
 | `^L`          | `^L`                 | Repersents a `<cr><lf>` for strings                                                     |
 | `^Z`          | `^Z`                 | End of string                                                                           |
 | `^U` and `^X` | `^U` or `^X`         | Clears the current console line                                                         |
@@ -74,5 +78,9 @@ Save and ***E***xit:<br>
 | `Z`           | `nZ`                 | Sleep (?***Z***leep?) `n` (supposed) seconds                                            |
 <!-- `X` has no definition despite not returning an error -->
 
-For the commands that handle input (`A`, `F`, `I`, `J`, `M`, `R`, `S`), the uppercase version of the command translates all
+For the commands that handle input (`A`, `F`, `I`, `J`, `M`, `N`, `R`, `S`), the uppercase version of the command translates all
 characters to uppercase and the lowercase version keeps the case of the provided input
+
+## Resources
+<https://bitsavers.org/pdf/digitalResearch/cpm/1.4/CPM_1.4_ED_Users_Manual_1978.pdf>
+<http://www.gaby.de/cpm/manuals/archive/cpm22htm/ch2.htm>

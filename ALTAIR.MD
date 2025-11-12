@@ -155,6 +155,42 @@ B -/ /-----/
 | 19      |  10011 |        `0001 0011` |
 | 20      |  10100 |        `0001 0100` |
 
+## PART 3: OPERATION OF THE ALTAIR 8800
+
+### PART 3A: THE FRONT PANEL SWITCHES AND LEDS
+
+#### PART 3A1: SWITCHES
+
+- `ON`-`OFF`: Power for the Altair 8800
+- `STOP`-`RUN`: Stops execution or runs from the current address
+- `SINGLE STEP`: Executes only the current instruction
+- `EXAMINE`-`EXAMINE NEXT`: Displays the contents of the current address or incriments address then displays the contents
+- `DEPOSIT`-`DEPOSIT NEXT`: Sets the contents of the current address or incriments address then sets the contents
+- `RESET`-`CLR`: Resets the Program Counter to 0x0000 or clear is only used by peripherals
+- `PROTECT`-`UNPROTECT`: Prevents modifications of memory or allows modification of memory
+- `AUX`: Only used by peripherals
+- `DATA/ADDRESS`: Set bits for the data and address
+
+#### PART 3A2: INDICATOR LEDS
+
+- `ADDRESS`: Displays the current address
+- `DATA`: Displays the data at the current address
+- `INTE`: Interrupt is enabled
+- `PROT`: Memory is protected
+- `WAIT`: CPU is waiting
+- `HLDA`: Hold is acknowleged
+
+#### PART 3A3: STATUS LEDS
+
+- `MEMR`: Memory bus is being used for reading memory data read
+- `INP`: Address bus is pointing to an input device
+- `M1`: CPU is processing the first machine cycle of an instruction
+- `OUT`: Address bus is pointing to an output device
+- `HLTA`: Halt is acknowleged
+- `STACK`: Address bus is pointing to the stack address
+- `WO`: Instruction is a write or output instruction, otherwise it is a read or input operation
+- `INT` Interrupt is acknowleged
+
 ## APPENDIX
 
 ### CIRCUIT BASED LOGIC GATES
