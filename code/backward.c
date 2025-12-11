@@ -53,4 +53,6 @@ char **argv;
     reverse(buffer);
     printf("%s%s", buffer, newline ? "\n" : "");
   }
+
+  fclose(fp);
 }
