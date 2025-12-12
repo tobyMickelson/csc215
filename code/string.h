@@ -36,10 +36,12 @@ char *itoa(val)
 int val;
 {
   char *str;
-  str = alloc(7);
+  char *ptr;
+  str = alloc(6);
+  ptr = str;
   
   while (val) {
-    *str++ = val % 10 + '0';
+    *ptr++ = (val % 10) + '0';
     val /= 10;
   }
 
