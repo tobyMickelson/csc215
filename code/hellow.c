@@ -1,8 +1,8 @@
-#include <stdio.h>
+#include "stdio.h"
 
 main(argc, argv)
 int argc;
-char ** argv;
+char **argv;
 {
   printf("Hello, World!\n");
 }
