@@ -43,6 +43,11 @@ struct _buf {
 #define getc fgetc
 #define putc fputc
 
+char *alloc();
+void free();
+void movmem();
+void printf();
+
 struct _header  {		/* Alloc/Free object structure */
 	struct _header *_ptr;
 	unsigned _size;
