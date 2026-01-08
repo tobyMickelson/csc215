@@ -1,9 +1,9 @@
 #include "stdio.h"
 #include "bigint.h"
 
-void set_bigint(numstr, num)
+void set_bigint(num, numstr)
 char *numstr;
-struct bigint *num;
+bigint *num;
 {
     char last_pos, i;
     num->negative = (numstr[0] == '-');
@@ -18,7 +18,7 @@ struct bigint *num;
 }
 
 char* get_bigint(num)
-struct bigint *num;
+bigint *num;
 {
    char *numstr;
    char start_pos, i;
@@ -31,4 +31,15 @@ struct bigint *num;
    }
    numstr[num->numdigits+start_pos] = '\0';
    return numstr;
+}
+
+void add_bigints(a, b, out)
+bigint *a;
+bigint *b;
+bigint *out;
+{
+    char *temp;
+    char carry;
+    temp = alloc(max(a->digits, b->digits) + 2);
+    
 }

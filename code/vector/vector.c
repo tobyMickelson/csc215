@@ -7,11 +7,11 @@ vector *v;
 int size_;
 {
   v->size = 0;
-  v->max_size = size_;
+  v->capacity = size_;
   v->data = alloc(size_);
 }
 
-void v_realloc(v, size_)
+void v_resize(v, size_)
 vector *v;
 int size_;
 {
@@ -19,7 +19,7 @@ int size_;
   temp = alloc(v->size);
   movmem(v->data, temp, v->size);
   free(v->data);
-  v->max_size = size_;
+  v->capacity = size_;
   v->data = alloc(size_);
   movmem(temp, v->data, v->size);
   free(temp);
@@ -29,7 +29,7 @@ void v_push_back(v, val)
 vector *v;
 char val;
 {
-  if (v->size >= v->max_size) v_realloc(v, v->max_size * 2);
+  if (v->size >= v->capacity) v_resize(v, v->capacity * 2);
   v->data[v->size++] = val;
 }
 
@@ -44,6 +44,6 @@ struct _vector *v;
 {
   free(v->data);
   v->size = 0;
-  v->max_size = 0;
+  v->capacity = 0;
   v->data = 0;
 }
