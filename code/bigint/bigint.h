@@ -1,10 +1,10 @@
 struct _bigint {
-    char negative;
-    char numdigits;
-    char* digits;
+  char negative;
+  char numdigits;
+  char *digits;
 };
 #define bigint struct _bigint
 
 void set_bigint();
-char* get_bigint();
+char *get_bigint();
 void add_bigints();
