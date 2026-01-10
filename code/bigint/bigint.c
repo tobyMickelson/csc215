@@ -17,6 +17,7 @@ char *numstr;
     /* printf("numstr[%d] is %c\n", last_pos-i, numstr[last_pos-i]); */
   }
 }
+/* order of "1234" appears to be ['4', '3', '2', '1'] with no null term. */
 
 char *get_bigint(num)
 bigint *num;
@@ -41,28 +42,33 @@ bigint *b;
 bigint *out;
 {
   char *outs;
-  char temp;
-  char carry, adone, bdone;
+  char temp, carry;
+  char adone, bdone;
   int i;
-  outs = alloc(max(a->digits, b->digits) + 2);
+
+  out->numdigits = max(a->numdigits, b->numdigits) + 1;
+  out->negative = 0;
+  outs = alloc(out->numdigits);
+  printf("[%d.%d.%d_", a->numdigits, b->numdigits, out->numdigits);
 
   i = 0;
-  adone = 0;
-  bdone = 0;
+  adone = 0; bdone = 0;
+  carry = 0;
   do {
-    if (a->digits[i] == '\0') adone = 1;
-    if (b->digits[i] == '\0') bdone = 1;
-    
     temp = (adone ? 0 : a->digits[i] - '0') + (bdone ? 0 : b->digits[i] - '0') + carry;
-    if (temp > '9') {
-      temp -= 10;
-      carry = 1;
-    } else carry = 0;
+    carry = temp / 10;
+    temp %= 10;
 
     temp += '0';
     outs[i++] = temp;
+    if (i >= a->numdigits) adone = 1;
+    if (i >= b->numdigits) bdone = 1;
     printf("%c", temp);
   } while (!adone && !bdone);
 
-  if (carry) outs[i] = '1';
+  if (carry) outs[i++] = '1';
+  else out->numdigits -= 1;
+  
+  printf("_%d.%d]", out->numdigits, carry);
+  out->digits = outs;
 }

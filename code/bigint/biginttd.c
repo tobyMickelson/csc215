@@ -21,9 +21,14 @@ main() {
     bigint res;
     set_bigint(&a, "321");
     set_bigint(&b, "987");
-    printf("a and b set\n");
+    s = get_bigint(&a);
+    printf("\t%s + ", s);
+    free(s);
+    s = get_bigint(&b);
+    printf("%s = ");
     add_bigints(&a, &b, &res);
     s = get_bigint(&res);
+    printf("%s\n");
     ASSERT_STR(s, "1308");
     free(s);
   }
