@@ -39,24 +39,28 @@ incPass() {
     }
 }
 
-#define TEST_CASE(description)  printf("\n\t%s\n", description); tests++; incPass(); currentAssertNumber = 0; failedCurrentTest = 0; firstTest = 0;
+#define TEST_CASE(description) printf("\n\t%s\n", description); tests++; incPass(); currentAssertNumber = 0; failedCurrentTest = 0; firstTest = 0;
 
-ASSERT(boolExp) 
-int boolExp; {
-    if (boolExp)
-        PASS();
-    else
-        FAIL();
-}
-
+#define ASSERT(a)              if (a)            PASS(); else FAIL();
 #define ASSERT_EQU(val1, val2) if (val1 == val2) PASS(); else FAIL();
 
-ASSERT_STR(strI, strJ) 
-char *strI[], *strJ[]; {
-    if (strcmp(strI, strJ) == 0) {
-        PASS();
+ASSERT_STR(str_a, str_b) 
+char *str_a, *str_b; {
+    if (!strcmp(str_a, str_b)) {
+        asserts++;
+        currentAssertNumber++;
+        passAsserts++;
+        printf("\t\033[0;32mAssertion %d passed\033[0;37m.\n", currentAssertNumber);
     } else {
-        FAIL();
+        asserts++;
+        currentAssertNumber++;
+        if (!failedCurrentTest) {
+            failedCurrentTest = 1;
+            failedTests++;
+        }
+        printf("\t\033[0;31mAssertion %d failed. ", currentAssertNumber);
+        failedAsserts++;
+        printf("(\"%s\" != \"%s\")\033[0;37m\n", str_a, str_b);
     }
 }
 

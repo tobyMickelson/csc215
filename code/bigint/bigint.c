@@ -49,7 +49,6 @@ bigint *out;
   out->numdigits = max(a->numdigits, b->numdigits) + 1;
   out->negative = 0;
   outs = alloc(out->numdigits);
-  printf("[%d.%d.%d_", a->numdigits, b->numdigits, out->numdigits);
 
   i = 0;
   adone = 0; bdone = 0;
@@ -61,14 +60,13 @@ bigint *out;
 
     temp += '0';
     outs[i++] = temp;
+    
     if (i >= a->numdigits) adone = 1;
     if (i >= b->numdigits) bdone = 1;
-    printf("%c", temp);
   } while (!adone && !bdone);
 
   if (carry) outs[i++] = '1';
   else out->numdigits -= 1;
   
-  printf("_%d.%d]", out->numdigits, carry);
   out->digits = outs;
 }
