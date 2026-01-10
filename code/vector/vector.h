@@ -1,3 +1,6 @@
+#ifndef VECTOR_H
+#define VECTOR_H
+
 struct _vector {
   int size;
   int capacity;
@@ -10,3 +13,5 @@ void v_resize();
 void v_push_back();
 char v_pop_back();
 void v_deinit();
+
+#endif

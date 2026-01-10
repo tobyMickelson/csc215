@@ -1,3 +1,6 @@
+#ifndef STRING_H
+#define STRING_H
+
 strlen(str)
 char *str;
 {
@@ -60,3 +63,5 @@ char *str;
 
   return val;
 }
+
+#endif

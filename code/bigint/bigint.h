@@ -1,3 +1,6 @@
+#ifndef BIGINT_H
+#define BIGINT_H
+
 struct _bigint {
   char negative;
   char numdigits;
@@ -8,3 +11,5 @@ struct _bigint {
 void set_bigint();
 char *get_bigint();
 void add_bigints();
+
+#endif

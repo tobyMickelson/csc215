@@ -1,4 +1,7 @@
-#include <stdio.h>
+#ifndef BDSCTEST_H
+#define BDSCTEST_H
+
+#include "stdio.h"
 
 unsigned tests;
 unsigned passedTests;
@@ -86,3 +89,5 @@ END_TESTING() {
     printf("\t\033[0;32m%d passed\033[0;37m, \033[0;31m %d failed\033[0;37m.", passAsserts, failedAsserts);
     printf("\n\t====================================\n");
 }
+
+#endif
