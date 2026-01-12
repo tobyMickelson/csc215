@@ -46,7 +46,7 @@ main() {
     set_bigint(&b, "32454");
     add_bigints(&a, &b, &res);
     s = get_bigint(&res);
-    ASSERT_STR(s, "39454");
+    ASSERT_STR(s, "38301");
     free(s);
     
     set_bigint(&a, "13183");

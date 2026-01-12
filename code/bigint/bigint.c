@@ -63,9 +63,9 @@ bigint *out;
     
     if (i >= a->numdigits) adone = 1;
     if (i >= b->numdigits) bdone = 1;
-  } while (!adone && !bdone);
+  } while (!adone || !bdone);
 
-  if (carry) outs[i++] = '1';
+  if (carry) outs[i++] = carry + '0';
   else out->numdigits -= 1;
   
   out->digits = outs;
