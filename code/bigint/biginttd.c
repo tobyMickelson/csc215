@@ -1,7 +1,6 @@
-#include "stdio.h"
-
 #include "bdsctest.h"
 #include "bigint.h"
+#include "stdio.h"
 
 main() {
   START_TESTING("biginttd.c");
@@ -22,9 +21,7 @@ main() {
   }
 
   TEST_CASE("add bigints") {
-    bigint a;
-    bigint b;
-    bigint res;
+    bigint a, b, res;
     
     set_bigint(&a, "321");
     set_bigint(&b, "987");

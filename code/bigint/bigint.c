@@ -37,18 +37,22 @@ bigint *num;
 }
 
 void add_bigints(a, b, out)
-bigint *a;
-bigint *b;
-bigint *out;
+bigint *a, *b, *out;
 {
-  char *outs;
-  char temp, carry;
+  if (a->negative != b->negative) {
+    b->negative = !b->negative;
+    sub_bigints(a, b, out);
+    b->negative = !b->negative;
+    return;
+  }
+  
+  char temp;
   char adone, bdone;
-  int i;
+  int i, carry;
 
   out->numdigits = max(a->numdigits, b->numdigits) + 1;
-  out->negative = 0;
-  outs = alloc(out->numdigits);
+  out->negative = a->negative;
+  out->digits = alloc(out->numdigits);
 
   i = 0;
   adone = 0; bdone = 0;
@@ -59,14 +63,51 @@ bigint *out;
     temp %= 10;
 
     temp += '0';
-    outs[i++] = temp;
+    out->digits[i++] = temp;
     
     if (i >= a->numdigits) adone = 1;
     if (i >= b->numdigits) bdone = 1;
   } while (!adone || !bdone);
 
-  if (carry) outs[i++] = carry + '0';
-  else out->numdigits -= 1;
+  if (carry) out->digits[i++] = carry + '0';
+
+  out->numdigits = i;
+}
+
+void sub_bigints(a, b, out)
+bigint *a, *b, *out;
+{
+  if (a->negative != b->negative) {
+    b->negative = !b->negative;
+    sub_bigints(a, b, out);
+    b->negative = !b->negative;
+    return;
+  }
   
-  out->digits = outs;
+  char temp;
+  char adone, bdone;
+  int i, carry;
+
+  out->numdigits = max(a->numdigits, b->numdigits) + 1;
+  out->negative = a->negative;
+  out->digits = alloc(out->numdigits);
+
+  i = 0;
+  adone = 0; bdone = 0;
+  carry = 0;
+  do {
+    temp = (adone ? 0 : a->digits[i] - '0') - (bdone ? 0 : b->digits[i] - '0') + carry;
+    carry = temp / 10;
+    temp %= 10;
+
+    temp += '0';
+    out->digits[i++] = temp;
+    
+    if (i >= a->numdigits) adone = 1;
+    if (i >= b->numdigits) bdone = 1;
+  } while (!adone || !bdone);
+
+  if (carry) out->digits[i++] = carry + '0';
+
+  out->numdigits = i;
 }
