@@ -1,8 +1,3 @@
-#ifndef BDSCTEST_H
-#define BDSCTEST_H
-
-#include "stdio.h"
-
 unsigned tests;
 unsigned passedTests;
 unsigned failedTests;
@@ -34,33 +29,29 @@ char* file;
 }
 
 incPass() {
-    if (tests != 1 && !failedCurrentTest) {
+    if (!firstTest && !failedCurrentTest) {
         passedTests++;
     }
 }
 
-#define TEST_CASE(description) printf("\n\t%s\n", description); tests++; incPass(); currentAssertNumber = 0; failedCurrentTest = 0; firstTest = 0;
+#define TEST_CASE(description)  printf("\n\t%s\n", description); tests++; incPass(); currentAssertNumber = 0; failedCurrentTest = 0; firstTest = 0;
 
-#define ASSERT(a)              if (a)            PASS(); else FAIL();
+ASSERT(boolExp) 
+int boolExp; {
+    if (boolExp)
+        PASS();
+    else
+        FAIL();
+}
+
 #define ASSERT_EQU(val1, val2) if (val1 == val2) PASS(); else FAIL();
 
-ASSERT_STR(str_a, str_b) 
-char *str_a, *str_b; {
-    if (!strcmp(str_a, str_b)) {
-        asserts++;
-        currentAssertNumber++;
-        passAsserts++;
-        printf("\t\033[0;32mAssertion %d passed\033[0;37m.\n", currentAssertNumber);
+ASSERT_STR(strI, strJ) 
+char *strI[], *strJ[]; {
+    if (strcmp(strI, strJ) == 0) {
+        PASS();
     } else {
-        asserts++;
-        currentAssertNumber++;
-        if (!failedCurrentTest) {
-            failedCurrentTest = 1;
-            failedTests++;
-        }
-        printf("\t\033[0;31mAssertion %d failed. ", currentAssertNumber);
-        failedAsserts++;
-        printf("(\"%s\" != \"%s\")\033[0;37m\n", str_a, str_b);
+        FAIL();
     }
 }
 
@@ -87,11 +78,9 @@ END_TESTING() {
 
     printf("\n\t====================================\n"); 
     (tests == 1) ?  printf("\t1 test.\n") : printf("\t%d tests.\n", tests);
-    printf("\t\033[0;32m%d passed\033[0;37m, \033[0;31m %d failed\033[0;37m.\n\n", passedTests, failedTests);
+    printf("\t\033[0;32m%d passed\033[0;37m, \033[0;31m %d failed\033[0;37m.", passedTests, failedTests);
 
-    (asserts == 1) ? printf("\t1 assertion.\n") : printf("\t%d assertions.\n", asserts);
+    (asserts == 1) ? printf("\n\n1 assertion.\n") : printf("\n\n\t%d assertions.\n", asserts);
     printf("\t\033[0;32m%d passed\033[0;37m, \033[0;31m %d failed\033[0;37m.", passAsserts, failedAsserts);
     printf("\n\t====================================\n");
 }
-
-#endif

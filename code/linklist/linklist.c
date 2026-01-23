@@ -1,115 +1,108 @@
 #include <stdio.h>
-#include <linklist.h>
+#include "LINKLIST.H"
+#define NULL 0
 
-linklist *mknode(data)
-int data;
-{
-  linklist *list;
-  list = alloc(4);
-  list->num = data;
-  list->next = NULL;
-  return list;
+struct node *mknode(n) int n; {
+    struct node* x;
+    x = alloc(4);
+    x->num = n;
+    x->next = NULL;
+    return x;
 }
 
-linklist *mkempty()
+
+/* returns number of nodes in the list */
+int lsize(head)
+struct node* head;
 {
-  return NULL;
+    int count;
+    count = 0;
+
+    while (head != NULL) {
+        count++;
+        head = head->next;
+    }
+    return count;
 }
 
-char *prnlist(list, list_str)
-linklist *list;
-char *list_str;
+/* returns 1 if list is empty, 0 otherwise */
+int isempty(head)
+struct node* head;
 {
-  if (isempty(list)) {
-    list_str = alloc(1);
-    *list_str = '\0';
+    if (head == NULL) 
+        return 1;
+    return 0;
+}
+
+char* prnlist(list, list_str)
+struct node* list;
+char* list_str;
+{
+    struct node* p;
+    char* ptr;
+    char numbuf[10];
+    int i, neg;
+
+    ptr = list_str;
+    p = list;
+    *ptr++ = '[';
+
+    while (p != NULL) {
+        i = 0;
+        neg = p->num < 0;
+        if (neg) p->num = -p->num;
+
+        do {
+            numbuf[i++] = '0' + (p->num % 10);
+            p->num /= 10;
+        } while (p->num > 0);
+
+        if (neg) numbuf[i++] = '-';
+        while (--i >= 0) *ptr++ = numbuf[i];
+
+        if (p->next != NULL) {
+            *ptr++ = ' '; *ptr++ = '-'; *ptr++ = '>';
+            *ptr++ = ' ';
+        }
+        p = p->next;
+    }
+
+    *ptr++ = ']';
+    *ptr = '\0';
     return list_str;
-  }
-  
-  list_str = alloc(lsize(list) * 8 + 8);
-  while (list->next) {
-    sprintf(list_str + strlen(list_str), "%d->", list->num);
-    list = list->next;
-  }
-  list_str[strlen(list_str) - 1] = '\0';
-  return list_str;
 }
 
-int lsize(list)
-linklist *list;
-{
-  if (list == NULL) return 0;
-  
-  int size;
-  size = 1;
-  while (list->next) {
-    size++;
-    list = list->next;
-  }
-  return size;
+
+void dellst(list) struct node* list; {
+    struct node* Next; struct node* current;
+    current = list;
+    while(current != NULL){
+        Next = current->next;
+        free(current);
+        current = Next; 
+    }
+    list = NULL;
 }
 
-int isempty(list)
-linklist *list;
+void insert(list, data, position)
+	struct node* list;
+	int data;
+	int position;
 {
-  if (list == NULL) return 1;
-  return 0;
-}
-
-linklist *getnode(list, index)
-linklist *list;
-int index;
-{
-  int i;
-  for (i = 0; i < index; i++)
-    list = list->next;
-  return list;
-}
-
-int getnum(list, index)
-linklist *list;
-int index;
-{
-  return getnode(list, index)->num;
-}
-
-void insert(list, index, data)
-linklist *list;
-int index, data;
-{
-  linklist *new;
-  new = alloc(4);
-  new->num = data;
-
-  if (index > 0)
-    getnode(list, index - 1)->next = new;
-
-  if (index < lsize(list))
-    new->next = getnode(list, index);
-  else
-    new->next = NULL;
-
-  return;
-}
-
-int remove(list, index)
-linklist *list;
-int index;
-{
-  
-}
-
-void dellst(list)
-linklist *list;
-{
-  if (!list) return;
-  
-  linklist *temp;
-  do {
-    temp = list;
-    free(temp);
-    list = list->next;
-  } while (list);
-
-  list = NULL;
+	struct node* curr_node;
+	struct node* prev_node;
+	curr_node = list;
+	while (position > 0) {
+		if (curr_node == NULL) {
+			return;
+		}
+		prev_node = curr_node;
+		curr_node = curr_node->next;
+		position--;
+	}
+	struct node* new_node;
+	new_node = mknode(data);
+	new_node->next = curr_node;
+	prev_node->next = new_node;
+	return;
 }

@@ -1,8 +1,5 @@
 /* stdio.h 	for BDS C v1.6  2/85 */
 
-#ifndef STDIO_H
-#define STDIO_H
-
 #define BDSC
 
 #define NULL 0		/* null pointer */
@@ -46,11 +43,6 @@ struct _buf {
 #define getc fgetc
 #define putc fputc
 
-char *alloc();
-void free();
-void movmem();
-void printf();
-
 struct _header  {		/* Alloc/Free object structure */
 	struct _header *_ptr;
 	unsigned _size;
@@ -58,5 +50,3 @@ struct _header  {		/* Alloc/Free object structure */
 
 struct _header  _base;		/* declare this external data to  */
 struct _header *_allocp;	/* be used by alloc() and free()  */
-
-#endif
